@@ -1,0 +1,1198 @@
+.loading-spinner {
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Selection states for suggestions */
+.suggestion-item.selected {
+    background: linear-gradient(90deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 2px solid #3b82f6;
+    font-weight: 600;
+}
+
+.suggestion-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f9fafb;
+}
+
+.suggestion-item.disabled:hover {
+    background: #f9fafb !important;
+}
+
+/* Popup styles */
+.fixed {
+    position: fixed;
+}
+
+.inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+.hidden {
+    display: none;
+}
+
+.glass-morphism {
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.hover-lift {
+    transition: all 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.data-row:hover {
+    background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Updated mismatch highlighting - exact yellow from screenshot */
+.mismatch-highlight {
+    background-color: rgb(255 255 0);
+    border-color: rgb(234 179 8);
+}
+
+.mismatch-text {
+    color: rgb(69 26 3);
+}
+
+/* Red highlighting for contact view mismatches - full row */
+.contact-mismatch-highlight {
+    background-color: rgb(255 255 0) !important;
+}
+
+.contact-mismatch-text {
+    color: rgb(69 26 3) !important;
+}
+
+.contact-mismatch-row {
+    background-color: rgb(255 255 0) !important;
+}
+
+.crm-highlight {
+    background-color: rgb(240 253 244);
+}
+
+.field-checkbox {
+    margin-right: 8px;
+}
+
+.selectable-field {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.selectable-field:hover {
+    background-color: rgb(243 244 246);
+}
+
+/* Updated selection styling - stronger override for selected fields */
+.selected-field {
+    background-color: rgb(20 83 45) !important;
+    color: white !important;
+    border: 2px solid rgb(59 130 246) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 0 0 1px rgb(59 130 246) !important;
+}
+
+.non-selectable-field {
+    cursor: not-allowed;
+    background-color: rgb(249 250 251) !important;
+    color: rgb(107 114 128) !important;
+}
+
+.non-selectable-field:hover {
+    background-color: rgb(249 250 251) !important;
+}
+
+/* Resizable table columns with Excel-like black borders */
+.resizable-table {
+    table-layout: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.resizable-table th,
+.resizable-table td {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #374151;
+    padding: 6px 12px !important;
+}
+
+.resizable-table th {
+    border-bottom: 2px solid #374151;
+    background-color: #f3f4f6;
+}
+
+.resizable-table th:not(:last-child)::after,
+.resizable-table td:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 1;
+}
+
+.resizable-table th:not(:last-child):hover::after,
+.resizable-table td:not(:last-child):hover::after {
+    background: rgba(59, 130, 246, 0.3);
+}
+
+/* Field column bold styling */
+.field-column {
+    font-weight: bold !important;
+}
+
+/* Compact contact dropdown styling with black dividers and reduced spacing */
+.contact-header-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.contact-name-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.contact-badges {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Compact contact table with resizable columns and black borders */
+.compact-contact-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.compact-contact-table th,
+.compact-contact-table td {
+    padding: 6px 8px !important;
+    border: 1px solid #374151;
+    margin: 0;
+    font-size: 12px !important;
+    line-height: 1.4;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.compact-contact-table th {
+    border-bottom: 2px solid #374151;
+    background-color: #f3f4f6;
+    font-weight: bold;
+}
+
+/* Preqin/Dakota-only contact capsule highlighting */
+.preqin-contact-highlight,
+.preqin-contact-highlight.bg-gradient-to-r,
+.preqin-contact-highlight.from-gray-50,
+.preqin-contact-highlight.to-gray-100,
+.preqin-contact-highlight.contact-dropdown-header {
+    background: rgb(255, 255, 0) !important;
+    background-image: none !important;
+    background-color: rgb(255, 255, 0) !important;
+    border: 2px solid rgb(234, 179, 8) !important;
+}
+
+.dakota-contact-highlight,
+.dakota-contact-highlight.bg-gradient-to-r,
+.dakota-contact-highlight.from-gray-50,
+.dakota-contact-highlight.to-gray-100,
+.dakota-contact-highlight.contact-dropdown-header {
+    background: rgb(255, 200, 100) !important;
+    background-image: none !important;
+    background-color: rgb(255, 200, 100) !important;
+    border: 2px solid rgb(234, 179, 8) !important;
+}
+
+.preqin-contact-highlight:hover,
+.preqin-contact-highlight.hover\\:from-gray-100:hover,
+.preqin-contact-highlight.hover\\:to-gray-150:hover {
+    background: rgb(255, 255, 0) !important;
+    background-image: none !important;
+    background-color: rgb(255, 255, 0) !important;
+}
+
+.dakota-contact-highlight:hover,
+.dakota-contact-highlight.hover\\:from-gray-100:hover,
+.dakota-contact-highlight.hover\\:to-gray-150:hover {
+    background: rgb(255, 200, 100) !important;
+    background-image: none !important;
+    background-color: rgb(255, 200, 100) !important;
+}
+
+/* Alternative approach - target specific elements */
+div[class*="preqin-contact-highlight"] {
+    background: rgb(255, 255, 0) !important;
+    background-image: none !important;
+}
+
+div[class*="dakota-contact-highlight"] {
+    background: rgb(255, 200, 100) !important;
+    background-image: none !important;
+}
+
+/* Compact dropdown container styling */
+.contact-dropdown-container {
+    margin-bottom: 8px !important;
+}
+
+.contact-dropdown-header {
+    padding: 8px 12px !important;
+}
+
+.contact-dropdown-content {
+    padding: 12px !important;
+}
+
+/* Enhanced Search Styles */
+.search-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-container-left {
+    position: relative;
+    max-width: 600px;
+    margin: 0;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 20px 16px 60px;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    font-size: 18px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-input-left {
+    width: 100%;
+    padding: 12px 16px 12px 45px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus,
+.search-input-left:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+}
+
+.search-container-left .search-icon {
+    left: 16px;
+}
+
+.search-buttons {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.search-buttons-left {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 6px;
+}
+
+.search-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.widen-btn {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.widen-btn:hover:not(:disabled) {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.search-btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+}
+
+.search-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Source Toggle Styles */
+.source-toggle-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.source-toggle-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-right: 8px;
+}
+
+.source-toggle-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.source-toggle-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.source-toggle-btn.active {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+    transform: translateY(-1px);
+}
+
+.source-toggle-btn.preqin {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.source-toggle-btn.preqin.active {
+    background: #7c3aed;
+    color: white;
+}
+
+.source-toggle-btn.preqin:hover:not(:disabled) {
+    background: #e9d5ff;
+}
+
+.source-toggle-btn.preqin.active:hover {
+    background: #6d28d9;
+}
+
+.source-toggle-btn.dakota {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.source-toggle-btn.dakota.active {
+    background: #d97706;
+    color: white;
+}
+
+.source-toggle-btn.dakota:hover:not(:disabled) {
+    background: #fde68a;
+}
+
+.source-toggle-btn.dakota.active:hover {
+    background: #b45309;
+}
+
+.source-toggle-btn.both {
+    background: #e0f2fe;
+    color: #0277bd;
+}
+
+.source-toggle-btn.both.active {
+    background: #0277bd;
+    color: white;
+}
+
+.source-toggle-btn.both:hover:not(:disabled) {
+    background: #b3e5fc;
+}
+
+.source-toggle-btn.both.active:hover {
+    background: #01579b;
+}
+
+.source-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.source-indicator.preqin {
+    background: #7c3aed;
+}
+
+.source-indicator.dakota {
+    background: #d97706;
+}
+
+.source-indicator.both {
+    background: #0277bd;
+}
+
+/* Dropdown Styles */
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+    margin-top: 8px;
+}
+
+.suggestion-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.suggestion-item:hover {
+    background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-company-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.suggestion-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.suggestion-tag {
+    background: #e5e7eb;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.suggestion-tag.type {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.suggestion-tag.location {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.suggestion-tag.aum {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.suggestion-tag.source-preqin {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.suggestion-tag.source-dakota {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Compact account table styling to match contact tables */
+#accountTable {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#accountTable th,
+#accountTable td {
+    padding: 6px 8px !important;
+    border: 1px solid #374151;
+    margin: 0;
+    font-size: 12px !important;
+    line-height: 1.4;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    white-space: nowrap;
+}
+
+#accountTable th:has(.column-search-container) {
+    overflow: visible !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+#accountTable th.search-header {
+    overflow: visible !important;
+}
+
+#accountTable th {
+    border-bottom: 2px solid #374151;
+    background-color: #f3f4f6;
+    font-weight: bold;
+}
+
+/* Compact account view section spacing */
+.account-view-section {
+    margin-bottom: 16px !important;
+}
+
+.account-view-container {
+    padding: 16px !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-input {
+        padding: 14px 16px 14px 50px;
+        font-size: 16px;
+    }
+
+    .search-input-left {
+        padding: 10px 14px 10px 40px;
+        font-size: 14px;
+    }
+
+    .search-container-left {
+        max-width: 100%;
+    }
+
+    .search-container-left .search-icon {
+        left: 14px;
+    }
+
+    .search-buttons {
+        right: 8px;
+        gap: 4px;
+    }
+
+    .search-buttons-left {
+        right: 6px;
+        gap: 4px;
+    }
+
+    .search-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .suggestion-item {
+        padding: 12px 16px;
+    }
+
+    .suggestion-details {
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    #accountTable th,
+    #accountTable td {
+        padding: 6px 8px !important;
+    }
+
+    .compact-contact-table th,
+    .compact-contact-table td {
+        padding: 6px 8px !important;
+    }
+
+    .contact-header-compact {
+        gap: 8px;
+    }
+
+    .contact-name-title {
+        gap: 6px;
+    }
+
+    .contact-badges {
+        gap: 4px;
+    }
+
+    .source-toggle-container {
+        gap: 6px;
+    }
+
+    .source-toggle-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 80px;
+    }
+}
+
+/* Loading States */
+.search-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #6b7280;
+}
+
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: #e5e7eb;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: #3b82f6;
+}
+
+.toggle-switch-handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.active .toggle-switch-handle {
+    transform: translateX(30px);
+}
+
+.crm-search-container {
+    position: relative !important;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.crm-search-container.active {
+    opacity: 1;
+    max-width: 500px;
+    overflow: visible;
+    /* INCREASE THIS from 400px to 500px or more */
+    /* OR try: max-width: none; width: 500px; */
+}
+
+/* Target the specific dropdown by ID */
+/* TEMPORARY DEBUG CSS - Remove after testing */
+#crmSuggestionsDropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 9999;
+    max-height: 400px;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+    margin-top: 8px;
+}
+
+.crm-suggestions-dropdown.hidden {
+    display: none !important;
+}
+
+.crm-suggestion-item {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f3f4f6 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    display: block !important;
+    /* Force display */
+    background: white !important;
+}
+
+.crm-suggestion-item:hover {
+    background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.crm-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* Column search styles */
+.column-search-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.column-search-input {
+    width: 100%;
+    padding: 6px 30px 6px 8px;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 12px;
+    background: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.column-search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.column-search-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 6px;
+    border: none;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.column-search-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.column-search-btn.crm {
+    background: #10b981;
+    color: white;
+}
+
+.column-search-btn.crm:hover:not(:disabled) {
+    background: #059669;
+}
+
+.column-search-btn.preqin {
+    background: #7c3aed;
+    color: white;
+}
+
+.column-search-btn.preqin:hover:not(:disabled) {
+    background: #6d28d9;
+}
+
+.column-search-btn.dakota {
+    background: #d97706;
+    color: white;
+}
+
+.column-search-btn.dakota:hover:not(:disabled) {
+    background: #b45309;
+}
+
+/* Column suggestions dropdown */
+/* Fix for column suggestion dropdowns - ensure they're visible */
+/* Column suggestions dropdown - FIXED positioning and z-index */
+/* Enhanced Column suggestions dropdown */
+.column-suggestions-dropdown {
+    position: absolute !important;
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    z-index: 9999 !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    backdrop-filter: blur(16px) !important;
+    min-width: 320px !important;
+    border-top: 3px solid #3b82f6 !important;
+}
+
+.column-suggestions-dropdown.hidden {
+    display: none !important;
+}
+
+/* Enhanced suggestion items */
+/* Enhanced suggestion items with better styling */
+.column-suggestion-item {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    background: white !important;
+    position: relative !important;
+}
+
+.column-suggestion-item:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.column-suggestion-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Source badges */
+.column-suggestion-item .bg-emerald-100 {
+    background-color: #d1fae5;
+}
+
+.column-suggestion-item .text-emerald-700 {
+    color: #047857;
+}
+
+.column-suggestion-item .border-emerald-200 {
+    border-color: #a7f3d0;
+}
+
+.column-suggestion-item .bg-violet-100 {
+    background-color: #ede9fe;
+}
+
+.column-suggestion-item .text-violet-700 {
+    color: #6d28d9;
+}
+
+.column-suggestion-item .border-violet-200 {
+    border-color: #c4b5fd;
+}
+
+.column-suggestion-item .bg-amber-100 {
+    background-color: #fef3c7;
+}
+
+.column-suggestion-item .text-amber-700 {
+    color: #b45309;
+}
+
+.column-suggestion-item .border-amber-200 {
+    border-color: #fde68a;
+}
+
+.column-suggestion-item .bg-gray-100 {
+    background-color: #f3f4f6;
+}
+
+.column-suggestion-item .text-gray-700 {
+    color: #374151;
+}
+
+.column-suggestion-item .border-gray-200 {
+    border-color: #e5e7eb;
+}
+
+/* Icons and text spacing */
+.column-suggestion-item .inline-flex.items-center {
+    display: inline-flex;
+    align-items: center;
+}
+
+.column-suggestion-item .w-3 {
+    width: 0.75rem;
+}
+
+.column-suggestion-item .h-3 {
+    height: 0.75rem;
+}
+
+.column-suggestion-item .mr-1 {
+    margin-right: 0.25rem;
+}
+
+.column-suggestion-item .text-gray-400 {
+    color: #9ca3af;
+}
+
+.column-suggestion-item .text-green-600 {
+    color: #16a34a;
+}
+
+.column-suggestion-item .text-green-500 {
+    color: #22c55e;
+}
+
+/* Utility classes for spacing */
+.column-suggestion-item .mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.column-suggestion-item .pr-2 {
+    padding-right: 0.5rem;
+}
+
+.column-suggestion-item .gap-2 {
+    gap: 0.5rem;
+}
+
+.column-suggestion-item .flex-wrap {
+    flex-wrap: wrap;
+}
+
+.column-suggestion-item .flex-1 {
+    flex: 1 1 0%;
+}
+
+/* Transition effects */
+.column-suggestion-item.group:hover .group-hover\:text-blue-600 {
+    color: #2563eb;
+}
+
+.column-suggestion-item .transition-colors {
+    transition-property: color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Font weights and sizes */
+.column-suggestion-item .font-semibold {
+    font-weight: 600;
+}
+
+.column-suggestion-item .font-medium {
+    font-weight: 500;
+}
+
+.column-suggestion-item .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.column-suggestion-item .text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+/* Rounded corners */
+.column-suggestion-item .rounded-full {
+    border-radius: 9999px;
+}
+
+/* Padding for badges */
+.column-suggestion-item .px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.column-suggestion-item .py-0\.5 {
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+}
+
+/* Improved scrollbar for dropdown */
+.column-suggestions-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.column-suggestions-dropdown::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.column-suggestions-dropdown::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.column-suggestions-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Loading state for suggestions */
+.column-suggestions-loading {
+    padding: 20px !important;
+    text-align: center !important;
+    color: #6b7280 !important;
+}
+
+.column-suggestions-loading .loading-spinner {
+    width: 20px !important;
+    height: 20px !important;
+    border-width: 2px !important;
+    margin-right: 8px !important;
+}
+
+.pitchbook-contact-highlight,
+.pitchbook-contact-highlight.bg-gradient-to-r,
+.pitchbook-contact-highlight.from-gray-50,
+.pitchbook-contact-highlight.to-gray-100,
+.pitchbook-contact-highlight.contact-dropdown-header {
+    background: rgb(131, 220, 250) !important;
+    background-image: none !important;
+    background-color: rgb(173, 216, 230) !important;
+    border: 2px solid rgb(59, 130, 246) !important;
+}
+
+.pitchbook-contact-highlight:hover,
+.pitchbook-contact-highlight.hover\\:from-gray-100:hover,
+.pitchbook-contact-highlight.hover\\:to-gray-150:hover {
+    background: rgb(173, 216, 230) !important;
+    background-image: none !important;
+    background-color: rgb(173, 216, 230) !important;
+}
+
+/* Alternative approach - target specific elements */
+div[class*="pitchbook-contact-highlight"] {
+    background: rgb(173, 216, 230) !important;
+    background-image: none !important;
+}
+
+.column-search-btn.pitchbook {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.column-search-btn.pitchbook:hover {
+    background-color: #2563eb;
+}
+
+/* ZoomInfo Contact Highlight */
+.zoominfo-contact-highlight,
+.zoominfo-contact-highlight.bg-gradient-to-r,
+.zoominfo-contact-highlight.from-gray-50,
+.zoominfo-contact-highlight.to-gray-100,
+.zoominfo-contact-highlight.contact-dropdown-header {
+    background: rgb(255, 239, 234) !important;
+    /* Light red background */
+    background-image: none !important;
+    background-color: rgb(255, 239, 234) !important;
+    /* Light red background */
+    border: 2px solid rgb(239, 68, 68) !important;
+    /* Red border */
+}
+
+/* Hover Effect for ZoomInfo Contact Highlight */
+.zoominfo-contact-highlight:hover,
+.zoominfo-contact-highlight.hover\\:from-gray-100:hover,
+.zoominfo-contact-highlight.hover\\:to-gray-150:hover {
+    background: rgb(255, 239, 234) !important;
+    background-image: none !important;
+    background-color: rgb(255, 239, 234) !important;
+}
+
+/* Alternative approach - target specific elements */
+div[class*="zoominfo-contact-highlight"] {
+    background: rgb(255, 239, 234) !important;
+    background-image: none !important;
+}
+
+/* ZoomInfo Column Search Button */
+.column-search-btn.zoominfo {
+    background-color: rgb(239, 68, 68);
+    /* Red for ZoomInfo button */
+    color: white;
+}
+
+.column-search-btn.zoominfo:hover {
+    background-color: rgb(185, 28, 28);
+    /* Darker red hover effect */
+}
+
+/* ZoomInfo Suggestions Dropdown Header */
+.zoominfo-contact-highlight.contact-dropdown-header {
+    background-color: rgb(255, 239, 234) !important;
+    font-weight: bold;
+    color: rgb(59, 130, 246);
+    /* Dark blue text for header (same as your branding) */
+}

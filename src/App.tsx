@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.tsx
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import LoginPage from './pages/loginPage';
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import { auth } from './firebase';
+import DataComparisonPage from './pages/DataComparisonPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+function App(): React.ReactElement { // Explicit return type
 
+
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // This is the key: listen for auth state changes from Firebase
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser); // Will be the user object on login, or null on logout
+      setIsLoading(false);  // We're done checking, so stop loading
+    });
+
+    // Cleanup the listener when the App component unmounts
+    return () => unsubscribe();
+  }, []);
+  if (isLoading) {
+    return <div>Loading Application...</div>; // Or a fancy spinner component
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route
+        path="/login"
+        element={!user ? <LoginPage /> : <Navigate to="/dashboard" />}
+      />
+      <Route
+        path="/dashboard"
+        element={user ? <DataComparisonPage /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/"
+        element={<Navigate to={user ? "/dashboard" : "/login"} />}
+      />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
