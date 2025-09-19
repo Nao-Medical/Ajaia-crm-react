@@ -1,0 +1,29 @@
+/* src/components/AccountViewTable.css */
+
+.tanstack-table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    /* A clickable width */
+    background: transparent;
+    /* Invisible by default */
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+}
+
+/* This is the crucial part for visual feedback */
+.resizer:hover,
+.isResizing {
+    background: #2563eb;
+    /* A visible blue color */
+    opacity: 0.5;
+}

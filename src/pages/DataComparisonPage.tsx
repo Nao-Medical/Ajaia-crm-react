@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth'; // Import User type
 import { auth } from '../firebase';
-import { type CompanyData, type CrmData, type Contact } from '../types/crm';
+import { useApiAuth } from '../hooks/useApiAuth';
+import { type CrmData, type CompanyData } from '../types/crm';
+import { apiService, type DataSource } from '../services/apiService';
 import AccountViewTable from '../components/AccountViewTable';
 import './DataComparisonPage.css'; // Your existing CSS file
+// import { mergeAndMatchContacts } from '../utils/helpers';
 
 // Helper components for SVGs to keep the main component clean
 const HeaderIcon = () => (
@@ -26,11 +29,17 @@ type PageStatus = 'loading' | 'success' | 'error';
 // ... you can add the other SVGs here as well
 
 const DataComparisonPage: React.FC = () => {
+
+
     const [status, setStatus] = useState<PageStatus>('loading');
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [lastUpdated, setLastUpdated] = useState<string>('');
+
     const navigate = useNavigate();
+    // API authentication state from our custom hook
+    const { isD365Authenticated, isLoading: isAuthLoading, error: authError } = useApiAuth();
+
+
 
     // State for all your data sources
     const [preqinData, setPreqinData] = useState<CompanyData | null>(null);
@@ -39,9 +48,16 @@ const DataComparisonPage: React.FC = () => {
     const [zoomInfoData, setZoomInfoData] = useState<CompanyData | null>(null);
     const [crmData, setCrmData] = useState<CrmData | null>(null);
     // We will add state and logic here in the next step
+
+
+    // const [preqinContacts, setPreqinContacts] = useState<Contact[]>([]);
+    // const [dakotaContacts, setDakotaContacts] = useState<Contact[]>([]);
+    // const [pitchbookContacts, setPitchbookContacts] = useState<Contact[]>([]);
+    // const [zoomInfoContacts, setZoomInfoContacts] = useState<Contact[]>([]);
+    // const [crmContacts, setCrmContacts] = useState<Contact[]>([]);
     const [searchParams] = useSearchParams();
 
-    const [contacts, setContacts] = useState<Contact[]>([]);
+
     useEffect(() => {
         // onAuthStateChanged returns an unsubscribe function. We use it for cleanup.
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -89,11 +105,17 @@ const DataComparisonPage: React.FC = () => {
             setZoomInfoData(data.zoominfo || null);
             setCrmData(data.crm || null);
 
+            // Set contacts data
+            // setPreqinContacts(decodedData.contacts || []);
+            // setDakotaContacts(decodedData.dakotaContacts || []);
+            // setPitchbookContacts(decodedData.pitchbookContacts || []);
+            // setZoomInfoContacts(decodedData.zoomInfoContacts || []);
+            // // CRM contacts might come from a separate source in URL data
+            // setCrmContacts(decodedData.crmContacts || []);
             // You can also process contacts here and set them to state
             // const filteredContacts = (data.contacts || []).filter(...);
             // setContacts(filteredContacts);
 
-            setStatus('success');
 
         } catch (error) {
             console.error('Error loading comparison data:', error);
@@ -103,6 +125,51 @@ const DataComparisonPage: React.FC = () => {
 
     }, [searchParams]); // Re-run this logic if the URL search params change
 
+    // const mergedContacts = useMemo<MergedContact[]>(() => {
+    //     if (isAuthLoading) return []; // Don't compute until auth checks are done
+    //     return mergeAndMatchContacts(
+    //         preqinContacts,
+    //         dakotaContacts,
+    //         pitchbookContacts,
+    //         zoomInfoContacts,
+    //         crmContacts
+    //     );
+    // }, [preqinContacts, dakotaContacts, pitchbookContacts, zoomInfoContacts, crmContacts, isAuthLoading]);
+
+
+    const handleSearch = async (source: DataSource, query: string) => {
+        try {
+            const result = await apiService.searchEnhanced(source, query);
+
+            // Update the state for the specific source that was searched
+            switch (source) {
+                case 'crm':
+                    setCrmData(result.company as CrmData); // May need type casting
+                    // setCrmContacts(result.contacts);
+                    break;
+                case 'preqin':
+                    setPreqinData(result.company);
+                    // setPreqinContacts(result.contacts);
+                    break;
+                case 'dakota':
+                    setDakotaData(result.company);
+                    // setDakotaContacts(result.contacts);
+                    break;
+                case 'pitchbook':
+                    setPitchbookData(result.company);
+                    // setPitchbookContacts(result.contacts);
+                    break;
+                case 'zoominfo':
+                    setZoomInfoData(result.company);
+                    // setZoomInfoContacts(result.contacts);
+                    break;
+            }
+            // You can add a success toast/notification here
+        } catch (error) {
+            console.error(`Search failed for ${source}:`, error);
+            // You can add an error toast/notification here
+        }
+    };
     // ... (your render logic with the switch case for status) ...
     // ... we will modify the 'success' case
     const handleLogout = async () => {
@@ -117,7 +184,27 @@ const DataComparisonPage: React.FC = () => {
     };
     // The main render logic
 
-
+    const AuthStatusIndicator = () => {
+        if (isAuthLoading) {
+            return <div className="text-sm text-gray-500">Authenticating with data sources...</div>;
+        }
+        if (authError) {
+            return <div className="text-sm text-red-600 font-semibold">{authError}</div>;
+        }
+        return (
+            <div className="flex flex-col space-y-1">
+                <div className="text-sm text-green-600">
+                    Data sources authenticated successfully.
+                </div>
+                {/* Show a specific warning if D365 is not connected */}
+                {!isD365Authenticated && (
+                    <div className="text-sm text-yellow-600 font-medium">
+                        Warning: D365 connection not available. CRM data may be limited.
+                    </div>
+                )}
+            </div>
+        );
+    };
 
 
     const renderContent = () => {
@@ -140,6 +227,7 @@ const DataComparisonPage: React.FC = () => {
                         pitchbookData={pitchbookData}
                         zoomInfoData={zoomInfoData}
                         crmData={crmData}
+                        onSearch={handleSearch}
                     />
                 );
             case 'error':
@@ -156,7 +244,7 @@ const DataComparisonPage: React.FC = () => {
     return (
         <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
             <div className="min-h-screen p-4">
-                <div className="max-w-[90%] mx-auto">
+                <div className="max-w-[80%] mx-auto">
                     <div className="flex items-center justify-between mb-8">
                         {/* User Info */}
                         <div className="flex items-center space-x-4">
@@ -185,6 +273,11 @@ const DataComparisonPage: React.FC = () => {
                         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 pb-2">
                             AJAIA CRM Intelligence - Data Comparison
                         </h1>
+                    </div>
+
+
+                    <div className="my-4">
+                        <AuthStatusIndicator />
                     </div>
 
                     {renderContent()} {/* This function renders the main content based on the page status */}
