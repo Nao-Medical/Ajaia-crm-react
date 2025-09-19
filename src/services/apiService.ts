@@ -11,8 +11,13 @@ export type DataSource = 'crm' | 'preqin' | 'dakota' | 'pitchbook' | 'zoominfo';
 
 // Type for suggestions
 export interface Suggestion {
+    id: string;
     name: string;
-    // Add other properties like id, type, city, aum
+    type: number;
+    city: string;
+    country: string;
+    aum: string | null; // AUM can be a string representing a number, or null
+    source: string;
 }
 
 // Type for the enhanced search result

@@ -77,7 +77,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         columnHelper.accessor('crm', {
             header: () => (
                 <>
-                    <div className="font-semibold text-sm mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>CRM Data</div>
+                    <div className="font-extrabold text-xs mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>CRM Data</div>
                     <ColumnSearch
                         source="crm"
                         initialValue={crmData?.companyName || ''}
@@ -92,7 +92,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         columnHelper.accessor('preqin', {
             header: () => (
                 <>
-                    <div className="font-semibold text-sm mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Preqin Data</div>
+                    <div className="font-extrabold text-xs mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Preqin Data</div>
                     <ColumnSearch
                         source="preqin"
                         initialValue={preqinData?.name || ''}
@@ -107,7 +107,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         columnHelper.accessor('dakota', {
             header: () => (
                 <>
-                    <div className="font-semibold text-sm mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Dakota Data</div>
+                    <div className="font-extrabold text-xs mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Dakota Data</div>
                     <ColumnSearch
                         source="dakota"
                         initialValue={dakotaData?.name || ''}
@@ -122,7 +122,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         columnHelper.accessor('pitchbook', {
             header: () => (
                 <>
-                    <div className="font-semibold text-sm mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>PitchBook Data</div>
+                    <div className="font-extrabold text-xs mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>PitchBook Data</div>
                     <ColumnSearch
                         source="pitchbook"
                         initialValue={pitchbookData?.name || ''}
@@ -137,7 +137,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         columnHelper.accessor('zoominfo', {
             header: () => (
                 <>
-                    <div className="font-semibold text-sm mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>ZoomInfo Data</div>
+                    <div className="font-extrabold text-xs mb-1 flex items-center"><span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>ZoomInfo Data</div>
                     <ColumnSearch
                         source="zoominfo"
                         initialValue={zoomInfoData?.name || ''}
@@ -166,7 +166,7 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
     return (
         <div className="animate-fade-in">
             <div className="glass-morphism rounded-2xl shadow-soft border border-white/20 overflow-hidden">
-                <div className="bg-blue-600 px-6 py-4 text-white">
+                <div className="bg-blue-600 px-6 py-4 text-white ">
                     <h2 className="text-xl font-bold">Account View</h2>
                 </div>
                 <div className="overflow-x-auto">
@@ -179,10 +179,10 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
                                         <th
                                             key={header.id}
                                             colSpan={header.colSpan}
-                                            className="relative border-b-2 border-gray-200 bg-gray-50 align-top"
+                                            className="relative border border-black bg-gray-50 align-top"
                                             style={{ width: header.getSize() }}
                                         >
-                                            <div className="p-2 text-left text-sm font-semibold text-gray-600">
+                                            <div className="p-2 text-left text-xs font-semibold text-gray-600">
                                                 {flexRender(header.column.columnDef.header, header.getContext())}
                                             </div>
                                             {header.column.getCanResize() && (
@@ -203,13 +203,13 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
                                     {row.getVisibleCells().map(cell => (
                                         <td
                                             key={cell.id}
-                                            className="border-b border-gray-200 text-sm text-gray-700 align-top"
+                                            className="border border-black text-xs text-gray-700  align-top"
                                             style={{ width: cell.column.getSize() }}
                                         >
                                             {/* Note: In your original code, the first column was styled differently. */}
                                             {/* We can add conditional styling here if needed. */}
                                             {cell.column.id === 'field' ? (
-                                                <div className="p-2 font-medium text-gray-800 bg-gray-50">
+                                                <div className="p-2 font-medium text-gray-800 bg-white">
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </div>
                                             ) : (
@@ -225,9 +225,9 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
                 <div className="p-4 bg-gray-50 flex justify-between items-center">
                     <div>
                         {/* TODO: Create a proper legend component */}
-                        <span className="text-sm text-gray-600">Legend: ...</span>
+                        <span className="text-xs text-gray-600">Legend: ...</span>
                     </div>
-                    <button className="px-4 py-2 bg-slate-600 text-white text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors shadow">
+                    <button className="px-4 py-2 bg-slate-600 text-white text-xs font-semibold rounded-lg hover:bg-slate-700 transition-colors shadow">
                         Select Fields to Update
                     </button>
                 </div>
