@@ -21,12 +21,11 @@ type RowData = {
     zoominfo: string | null;
 };
 
-// A helper for rendering cells
-const DataCell: React.FC<{ value: string | undefined | null }> = ({ value }) => (
-    <div className="p-2">{value || <span className="text-gray-400">N/A</span>}</div>
-);
-
 const columnHelper = createColumnHelper<RowData>();
+
+const selectableFields = [
+    'Company Name', 'Subtype', 'AUM ($B)', 'Street 1', 'City', 'State', 'Postal Code', 'Main Phone', 'Website'
+];
 
 interface AccountViewTableProps {
     crmData: CrmData | null;
@@ -115,6 +114,75 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
     const [globalSearchTrigger, setGlobalSearchTrigger] = useState(0);
     const [openDropdowns, setOpenDropdowns] = useState<{ [key in DataSource]?: boolean }>({});
 
+    // Selection state
+    const [selectMode, setSelectMode] = useState(false);
+    const [selectedCells, setSelectedCells] = useState<{ [rowField: string]: DataSource | null }>({});
+
+    // Map table row field to CRM API field
+    const fieldMap: Record<string, string> = {
+        'Company Name': 'company_name',
+        'Subtype': 'subtype',
+        'AUM ($B)': 'aum',
+        'Street 1': 'address',
+        'City': 'city',
+        'State': 'state',
+        'Postal Code': 'zipCode',
+        'Main Phone': 'phone',
+        'Website': 'website',
+    };
+
+    // Helper to get value from the correct source
+    function getValueFromSource(rowField: string, source: DataSource): string | null {
+        switch (source) {
+            case 'preqin': return preqinData ? (preqinData as any)[fieldMap[rowField] || rowField] ?? null : null;
+            case 'dakota': return dakotaData ? (dakotaData as any)[fieldMap[rowField] || rowField] ?? null : null;
+            case 'pitchbook': return pitchbookData ? (pitchbookData as any)[fieldMap[rowField] || rowField] ?? null : null;
+            case 'zoominfo': return zoomInfoData ? (zoomInfoData as any)[fieldMap[rowField] || rowField] ?? null : null;
+            default: return null;
+        }
+    }
+
+    // Handler for update button
+    const handleUpdateAccount = async () => {
+        if (!crmData) {
+            return;
+        }
+        // Find the first selected source (must be preqin, dakota, or zoominfo)
+        const allowedSources: DataSource[] = ['preqin', 'dakota', 'zoominfo'];
+        const selectedSource = Object.values(selectedCells).find(src => allowedSources.includes(src as DataSource)) as DataSource | undefined;
+
+        if (!selectedSource) {
+            alert("Please select at least one field from Preqin, Dakota, or ZoomInfo to update.");
+            return;
+        }
+
+        // Build payload from selectedCells
+        const payload: import('../services/apiService').UpdateAccountPayload = {
+            company_name: crmData.name ?? '',
+            source: selectedSource,
+        };
+        Object.entries(selectedCells).forEach(([rowField, source]) => {
+            if (source && fieldMap[rowField]) {
+                const value = getValueFromSource(rowField, source);
+                if (value !== undefined && value !== null) {
+                    (payload as any)[fieldMap[rowField]] = value;
+                }
+            }
+        });
+
+        try {
+            const result = await apiService.updateAccountEnhanced(payload);
+            if (result.success) {
+                setSelectMode(false);
+                setSelectedCells({});
+            } else {
+                console.error('Update failed:', result.error);
+            }
+        } catch (err: any) {
+            console.error('Update error:', err.message || err);
+        }
+    };
+
     // Table data
     const data = useMemo<RowData[]>(() => [
         { field: 'Company Name', crm: crmData?.name ?? null, preqin: preqinData?.name ?? null, dakota: dakotaData?.name ?? null, pitchbook: pitchbookData?.name ?? null, zoominfo: zoomInfoData?.name ?? null },
@@ -143,6 +211,20 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         });
     };
 
+    // Helper for dark yellow highlight if cell is unique (not equal to CRM), but skip for 'Type' row
+    function getHighlightClass(
+        cellValue: string | null | undefined,
+        crmValue: string | null | undefined,
+        rowField: string
+    ) {
+        if (rowField === 'Type') return ''; // Never highlight Type row
+        if (!cellValue) return '';
+        if (crmValue && cellValue !== crmValue) {
+            return 'bg-yellow-300 border-yellow-600 border';
+        }
+        return '';
+    }
+
     // Column defs (static identity)
     const columns = useMemo(() => [
         columnHelper.accessor('field', {
@@ -168,90 +250,94 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
                     />
                 </>
             ),
-            cell: info => <DataCell value={info.getValue()} />,
-            size: 200,
-        }),
-        columnHelper.accessor('preqin', {
-            header: () => (
-                <>
-                    <div className="font-extrabold text-xs mb-1 flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Preqin Data
+            cell: info => {
+                const row = info.row.original;
+                const crmValue = row.crm;
+                const rowField = row.field;
+                // Highlight CRM if it's unique (not present in any other column in this row), but not for Type row
+                const others = [row.preqin, row.dakota, row.pitchbook, row.zoominfo];
+                const highlight =
+                    rowField === 'Type'
+                        ? ''
+                        : (others.every(val => val !== crmValue && crmValue) ? 'bg-yellow-300 border-yellow-600 border' : '');
+                return (
+                    <div className={`p-2 ${highlight}`}>
+                        {crmValue || <span className="text-gray-400">N/A</span>}
                     </div>
-                    <ColumnSearch
-                        source="preqin"
-                        initialValue=""
-                        onSubmit={handleColumnSearch}
-                        color="purple"
-                        forceOpen={!!openDropdowns['preqin']}
-                        forceQuery={globalQuery}
-                        trigger={globalSearchTrigger}
-                    />
-                </>
-            ),
-            cell: info => <DataCell value={info.getValue()} />,
+                );
+            },
             size: 200,
         }),
-        columnHelper.accessor('dakota', {
-            header: () => (
-                <>
-                    <div className="font-extrabold text-xs mb-1 flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Dakota Data
-                    </div>
-                    <ColumnSearch
-                        source="dakota"
-                        initialValue=""
-                        onSubmit={handleColumnSearch}
-                        color="orange"
-                        forceOpen={!!openDropdowns['dakota']}
-                        forceQuery={globalQuery}
-                        trigger={globalSearchTrigger}
-                    />
-                </>
-            ),
-            cell: info => <DataCell value={info.getValue()} />,
-            size: 200,
-        }),
-        columnHelper.accessor('pitchbook', {
-            header: () => (
-                <>
-                    <div className="font-extrabold text-xs mb-1 flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>PitchBook Data
-                    </div>
-                    <ColumnSearch
-                        source="pitchbook"
-                        initialValue=""
-                        onSubmit={handleColumnSearch}
-                        color="blue"
-                        forceOpen={!!openDropdowns['pitchbook']}
-                        forceQuery={globalQuery}
-                        trigger={globalSearchTrigger}
-                    />
-                </>
-            ),
-            cell: info => <DataCell value={info.getValue()} />,
-            size: 200,
-        }),
-        columnHelper.accessor('zoominfo', {
-            header: () => (
-                <>
-                    <div className="font-extrabold text-xs mb-1 flex items-center">
-                        <span className="w-2 h-2 rounded-full bg-red-500 mr-2"></span>ZoomInfo Data
-                    </div>
-                    <ColumnSearch
-                        source="zoominfo"
-                        initialValue=""
-                        onSubmit={handleColumnSearch}
-                        color="red"
-                        forceOpen={!!openDropdowns['zoominfo']}
-                        forceQuery={globalQuery}
-                        trigger={globalSearchTrigger}
-                    />
-                </>
-            ),
-            cell: info => <DataCell value={info.getValue()} />,
-            size: 200,
-        }),
-    ], [handleColumnSearch, globalQuery, openDropdowns, globalSearchTrigger]);
+        ...(['preqin', 'dakota', 'pitchbook', 'zoominfo'] as const).map(col =>
+            columnHelper.accessor(col, {
+                header: () => {
+                    const colorMap = {
+                        preqin: 'purple',
+                        dakota: 'orange',
+                        pitchbook: 'blue',
+                        zoominfo: 'red',
+                    } as const;
+                    const labelMap = {
+                        preqin: 'Preqin Data',
+                        dakota: 'Dakota Data',
+                        pitchbook: 'PitchBook Data',
+                        zoominfo: 'ZoomInfo Data',
+                    } as const;
+                    return (
+                        <>
+                            <div className="font-extrabold text-xs mb-1 flex items-center">
+                                <span className={`w-2 h-2 rounded-full bg-${colorMap[col]}-500 mr-2`}></span>
+                                {labelMap[col]}
+                            </div>
+                            <ColumnSearch
+                                source={col}
+                                initialValue=""
+                                onSubmit={handleColumnSearch}
+                                color={colorMap[col]}
+                                forceOpen={!!openDropdowns[col]}
+                                forceQuery={globalQuery}
+                                trigger={globalSearchTrigger}
+                            />
+                        </>
+                    );
+                },
+                cell: info => {
+                    const row = info.row.original;
+                    const cellValue = row[col];
+                    const crmValue = row.crm;
+                    const rowField = row.field;
+                    const highlight = getHighlightClass(cellValue, crmValue, rowField);
+
+                    // Only allow selection if selectMode, field is selectable, and cell is not empty
+                    const isSelectable = selectMode && selectableFields.includes(rowField) && !!cellValue;
+                    const isSelected = selectedCells[rowField] === col;
+
+                    return (
+                        <div
+                            className={
+                                `p-2 transition-colors duration-100 cursor-pointer
+                                ${isSelected
+                                    ? 'bg-green-700 text-white border-green-800 border'
+                                    : highlight}
+                                ${isSelectable && !isSelected ? 'ring-2 ring-blue-400' : ''}
+                                ${!isSelectable ? 'cursor-default' : ''}`
+                            }
+                            onClick={() => {
+                                if (!isSelectable) return;
+                                setSelectedCells(prev => ({
+                                    ...prev,
+                                    [rowField]: prev[rowField] === col ? null : col
+                                }));
+                            }}
+                        >
+                            {cellValue || <span className="text-gray-400">N/A</span>}
+                        </div>
+                    );
+                },
+                size: 200,
+            })
+        ),
+    ], [handleColumnSearch, globalQuery, openDropdowns, globalSearchTrigger, selectMode, selectedCells]);
 
     const table = useReactTable({
         data,
@@ -262,6 +348,8 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
         state: { columnSizing },
         onColumnSizingChange: setColumnSizing,
     });
+
+    const anySelected = Object.values(selectedCells).some(v => v);
 
     return (
         <div className="animate-fade-in">
@@ -352,8 +440,17 @@ const AccountViewTable: React.FC<AccountViewTableProps> = ({
                 <div className="p-4 bg-gray-50 flex justify-between items-center">
                     <span className="text-xs text-gray-600">Legend: ...</span>
                     <div className='flex gap-3'>
-                        <button className="px-4 py-2 bg-slate-600 text-white text-xs font-semibold rounded-lg hover:bg-slate-700 transition-colors shadow">
-                            Select Fields to Update
+                        <button
+                            className={`px-4 py-2 ${anySelected ? 'bg-green-600 hover:bg-green-700' : 'bg-slate-600 hover:bg-slate-700'} text-white text-xs font-semibold rounded-lg transition-colors shadow`}
+                            onClick={() => {
+                                if (anySelected) {
+                                    handleUpdateAccount();
+                                } else {
+                                    setSelectMode(true);
+                                }
+                            }}
+                        >
+                            {anySelected ? 'Update account in CRM' : 'Select Fields to Update'}
                         </button>
                         <button
                             onClick={() => window.location.reload()}

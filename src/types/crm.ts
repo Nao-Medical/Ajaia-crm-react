@@ -38,7 +38,7 @@ export interface CrmData {
 
 export type Contact = {
   id: string;
-  source: DataSource;
+  source: DataSource | DataSource[];      // <-- allow array for merging
 
   // Names & title
   name?: string;
@@ -58,9 +58,10 @@ export type Contact = {
 
   // Meta
   category?: string;
-  sourceTag?: string;
+  sourceTag?: string | string[];          // <-- allow array for merging
   linkedInUrl?: string;
   dear?: string;
+  companyName?: string;
 };
 
 export interface MergedContact {

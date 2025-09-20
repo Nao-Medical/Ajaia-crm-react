@@ -74,7 +74,7 @@ const DataComparisonPage: React.FC = () => {
                                 setZoomInfoData={setZoomInfoData}
                                 setContacts={setContacts}
                             />
-                            <ContactView contacts={contacts} />
+                            <ContactView contacts={contacts} crmCompanyName={crmData?.name ?? ''} />
                         </>
                     )}
                 </div>

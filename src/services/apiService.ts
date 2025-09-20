@@ -26,6 +26,20 @@ export interface EnhancedSearchResult {
   contacts: Contact[];
 }
 
+/** Type for account update payload (adjust as needed) */
+export interface UpdateAccountPayload {
+  company_name: string;
+  source: string;
+  [key: string]: any; // for dynamic fields
+}
+
+/** Type for update account response */
+export interface UpdateAccountResponse {
+  success: boolean;
+  error?: string;
+  [key: string]: any;
+}
+
 const suggestionEndpoints: Record<DataSource, string> = {
   crm: '/api/d365/search/suggestions',
   preqin: '/api/search/suggestions',
@@ -79,5 +93,26 @@ export const apiService = {
       throw new Error(`Enhanced search failed for ${source}`);
     }
     return result.data;
+  },
+
+  /** Update CRM account with enhanced endpoint */
+  async updateAccountEnhanced(
+    payload: UpdateAccountPayload,
+    signal?: AbortSignal
+  ): Promise<UpdateAccountResponse> {
+    const response = await fetch(
+      `${API_BASE_URL}/api/dynamics/update-account/enhanced`,
+      {
+        method: 'POST',
+        headers: API_HEADERS,
+        body: JSON.stringify(payload),
+        signal,
+      }
+    );
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Failed to update account');
+    }
+    return result;
   },
 };
