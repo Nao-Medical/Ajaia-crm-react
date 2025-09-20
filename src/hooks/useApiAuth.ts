@@ -12,7 +12,7 @@ export interface ApiAuthState {
     error: string | null;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://567534ed9849.ngrok-free.app';
+const API_BASE_URL = "https://567534ed9849.ngrok-free.app"
 
 export const useApiAuth = () => {
     const [authState, setAuthState] = useState<ApiAuthState>({

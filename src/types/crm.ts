@@ -1,67 +1,74 @@
-// src/types/crm.ts
+import type { DataSource } from "../services/apiService";
 
-// A generic interface for the external data sources
 export interface CompanyData {
-    name: string;
-    type?: string;
-    subtype?: string;
-    aum?: string; // Or number
-    street1?: string;
-    street2?: string;
-    address?: string;
-    // Full city name from Preqin
-    city?: string;
-    city_full?: string;
-    phone?: string;
-    state?: string;
-    postalCode?: string;
-    zipCode?: string;
-    country?: string;
-    mainPhone?: string;
-    website?: string;
+  name: string;
+  type?: string;
+  subtype?: string;
+  aum?: string;
+  street1?: string;
+  street2?: string;
+  address?: string;
+  city?: string;
+  city_full?: string;
+  phone?: string;
+  state?: string;
+  postalCode?: string;
+  zipCode?: string;
+  country?: string;
+  mainPhone?: string;
+  website?: string;
 }
 
-// Corrected CRM data interface to match its usage in the component.
-// It uses different field names for addresses, phone, etc.
 export interface CrmData {
-    name?: string;      // Corresponds to 'Company Name'
-    type?: string;      // Corresponds to 'Type'
-    subtype?: string;   // Corresponds to 'Subtype'
-    aum?: string;       // Corresponds to 'AUM'
-    address?: string;
-    city_full?: string;  // Corresponds to 'Street 1'
-    address2?: string;  // Corresponds to 'Street 2'
-    city?: string; // Corresponds to 'City'
-    state?: string;     // Corresponds to 'State'
-    zipCode?: string;   // Corresponds to 'Postal Code'
-    country?: string;   // Corresponds to 'Country'
-    phone?: string;     // Corresponds to 'Main Phone'
-    website?: string;   // Corresponds to 'Website'
-    // This field was used in the original ColumnSearch, but `name` is more consistent.
-    // If you need both, you can keep it.
-    companyName?: string;
+  name?: string;
+  type?: string;
+  subtype?: string;
+  aum?: string;
+  address?: string;
+  city_full?: string;
+  address2?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  phone?: string;
+  website?: string;
+  companyName?: string;
 }
 
+export type Contact = {
+  id: string;
+  source: DataSource;
 
-export interface Contact {
-    // Make sure your contact type has all necessary fields
-    id?: string;
-    contactId?: string;
-    firstName: string;
-    lastName: string;
-    title?: string;
-    email?: string;
-    phone?: string;
-    linkedIn?: string;
-    // ... add any other fields
-}
+  // Names & title
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  title?: string;
+
+  // Coordinates
+  email?: string;
+  phone?: string;
+
+  // Location
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+
+  // Meta
+  category?: string;
+  sourceTag?: string;
+  linkedInUrl?: string;
+  dear?: string;
+};
 
 export interface MergedContact {
-    preqinContact: Contact | null;
-    dakotaContact: Contact | null;
-    pitchbookContact: Contact | null;
-    zoomInfoContact: Contact | null;
-    crmContact: Contact | null;
-    dataSource: string;
-    index: number;
+  preqinContact: Contact | null;
+  dakotaContact: Contact | null;
+  pitchbookContact: Contact | null;
+  zoomInfoContact: Contact | null;
+  crmContact: Contact | null;
+  dataSource: string;
+  index: number;
 }
